@@ -1,8 +1,7 @@
-
+<p align="right">🌍 Languages: [🇬🇧 English](README.md) | [🇦🇴 Português (Angola)](README.pt.md)</p>
 
 # 🧰 easyinstall
 
-**🌍 Languages:** [🇬🇧 English](README.md) | [🇦🇴 Português (Angola)](README.pt.md)
 
 **easyinstall** is a curated collection of shell scripts that simplify the installation and configuration of common Linux server packages. Inspired by the "Add Roles and Features" wizard from Microsoft Windows Server, easyinstall aims to bring a similar ease-of-use experience to Linux system administrators.
 
