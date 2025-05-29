@@ -25,8 +25,13 @@ Configurar um servidor Linux para funções específicas (como DHCP, DNS, gestã
 ssh root@seu.servidor
 
 # Baixe o script de instalação
-curl -O https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-glpi.sh
+curl -O https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-deb-glpi.sh
+or
+curl -O https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-glpi.sh
 
 # Execute o script
-chmod +x easyinstall-glpi.sh
-bash easyinstall-glpi.sh
+chmod +x easyinstall-deb-glpi.sh
+bash easyinstall-deb-glpi.sh
+or
+chmod +x easyinstall-rpm-glpi.sh
+bash easyinstall-rpm-glpi.sh
