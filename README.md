@@ -1,10 +1,7 @@
-<p align="right">
- <a href="README.md">🇬🇧</a> <a href="README.pt.md">🇦🇴</a>
-  
-</p>
-  🌐 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
-[![pt-AO](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-AO.md)
+
+🌐<br> 
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
+[![pt-AO](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md)
 
 # 🧰 easyinstall
 
