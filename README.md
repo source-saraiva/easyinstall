@@ -28,9 +28,10 @@ Setting up a Linux server for specific roles (like DHCP, DNS, IT asset managemen
 # Connect to your server as root via SSH
 ssh root@your.server
 
-# Download installation script
-curl -O https://github.com/source-saraiva/easyinstall/blob/main/easyinstall-glpi.sh
+# Download & run the installation script
+# For RPM
+u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 
-# Run it
-chmod +x easyinstall-glpi.sh
-bash easyinstall-glpi.sh
+# For Deb
+u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-deb-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
+
