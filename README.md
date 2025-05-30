@@ -37,5 +37,3 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 # For Deb
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-deb-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 ```
-
-Let me know if you’d like this translation formatted into a README file or adjusted to follow a particular style (e.g., for GitHub pages).
