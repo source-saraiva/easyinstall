@@ -1,8 +1,9 @@
 <p align="right">
   🌐 <a href="README.md">🇬🇧</a> <a href="README.pt.md">🇦🇴</a>
+  [![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
 </p>
 
-![United States](https://github.com/madebybowtie/FlagKit/blob/master/Assets/Flags/US.png)
+
 
 # 🧰 easyinstall
 
