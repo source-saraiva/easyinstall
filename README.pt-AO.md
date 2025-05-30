@@ -18,7 +18,7 @@ Configurar um servidor Linux para funções específicas (como DHCP, DNS, gestã
   - **Servidor BIND9** (DNS)
   - *(Mais opções em breve!)*  
 - ⚙️ Base de scripts limpa, modular e fácil de expandir
-- 🧪 Compatível com sistemas baseados em Debian e RHEL
+- 🧪 Compatível com sistemas baseados em RHEL e no futuro Debian
 - 🧑‍💻 Ideal para sysadmins, estudantes e equipes de TI em laboratórios ou ambientes de produção
 
 ## 📋 Exemplo de Uso
