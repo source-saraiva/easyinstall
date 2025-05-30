@@ -21,7 +21,7 @@ Setting up a Linux server for specific roles (such as DHCP, DNS, IT asset manage
   * **BIND9 Server** (DNS)
   * *(More options coming soon!)*
 * ⚙️ Clean, modular, and easily extensible script base
-* 🧪 Compatible with Debian-based and RHEL-based systems
+* 🧪 Compatible with RHEL-based and in the future Debian-based systems
 * 🧑‍💻 Ideal for sysadmins, students, and IT teams in labs or production environments
 
 ## 📋 Usage Example
