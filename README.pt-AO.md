@@ -1,3 +1,6 @@
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
+[![pt-AO](https://img.shields.io/badge/lang-pt--ao-green.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md)
+
 # 🧰 easyinstall
 
 **easyinstall** é uma coleção de scripts que simplifica a instalação e configuração de pacotes comuns em servidores Linux. Inspirado no assistente "Adicionar Funções e Recursos" do Microsoft Windows Server, o easyinstall oferece uma experiência semelhante para administradores de sistemas Linux.
