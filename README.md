@@ -1,4 +1,4 @@
-🇬🇧 English | [AO Português](README.pt.md)
+<p align="right">🌐 [🇬🇧](README.md) [🇦🇴](README.pt.md)</p>
 
 # 🧰 easyinstall
 
