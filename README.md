@@ -1,7 +1,12 @@
-
-🌐Languages<br> 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
-[![pt-AO](https://img.shields.io/badge/lang-pt--AO-green.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md)
+<p align="right">
+  🌐 Languages<br>
+  <a href="https://github.com/source-saraiva/easyinstall/blob/main/README.md">
+    <img src="https://img.shields.io/badge/lang-en-red.svg" alt="English" />
+  </a>
+  <a href="https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md">
+    <img src="https://img.shields.io/badge/lang-pt--AO-green.svg" alt="Português (Angola)" />
+  </a>
+</p>
 
 # 🧰 easyinstall
 
