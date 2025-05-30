@@ -1,37 +1,43 @@
+Here’s the full translation into English:
+
+---
+
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
 [![pt-AO](https://img.shields.io/badge/lang-pt--ao-green.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md)
 
 # 🧰 easyinstall
 
-
-**easyinstall** is a curated collection of shell scripts that simplify the installation and configuration of common Linux server packages. Inspired by the "Add Roles and Features" wizard from Microsoft Windows Server, easyinstall aims to bring a similar ease-of-use experience to Linux system administrators.
+**easyinstall** is a collection of scripts that simplifies the installation and configuration of common packages on Linux servers. Inspired by the "Add Roles and Features" wizard in Microsoft Windows Server, easyinstall offers a similar experience for Linux system administrators.
 
 ## ✨ Purpose
 
-Setting up a Linux server for specific roles (like DHCP, DNS, IT asset management, etc.) often involves numerous manual steps. **easyinstall** automates these tasks, making it easy to provision and configure your Linux server with just a few commands.
+Setting up a Linux server for specific roles (such as DHCP, DNS, IT asset management, etc.) usually requires many manual steps. **easyinstall** automates these tasks, allowing you to prepare your server with just a few commands.
 
 ## ✅ Features
 
-- 🚀 One-command installation of popular Linux server roles
-- 📦 Scripted setup for:
-  - **DHCP Server**
-  - **GLPI Server** (IT Asset Management)
-  - **BIND9 Server** (DNS)
-  - *(More coming soon!)*  
-- ⚙️ Clean, modular, and easily extensible script base
-- 🧪 Designed for Debian-based and RHEL-based systems
-- 🧑‍💻 Ideal for sysadmins, students, and IT teams setting up test labs or production servers
+* 🚀 One-command installation for various server roles
+* 📦 Automated installation for:
 
-## 📋 Example Usage
+  * **DHCP Server**
+  * **GLPI Server** (IT Asset Management)
+  * **BIND9 Server** (DNS)
+  * *(More options coming soon!)*
+* ⚙️ Clean, modular, and easily extensible script base
+* 🧪 Compatible with Debian-based and RHEL-based systems
+* 🧑‍💻 Ideal for sysadmins, students, and IT teams in labs or production environments
+
+## 📋 Usage Example
 
 ```bash
 # Connect to your server as root via SSH
 ssh root@your.server
 
-# Download & run the installation script
+# Download & Run the installation script
 # For RPM
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 
 # For Deb
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-deb-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
+```
 
+Let me know if you’d like this translation formatted into a README file or adjusted to follow a particular style (e.g., for GitHub pages).
