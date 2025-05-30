@@ -1,5 +1,4 @@
 <p align="right">
-  🌐 Languages<br>
   <a href="https://github.com/source-saraiva/easyinstall/blob/main/README.md">
     <img src="https://img.shields.io/badge/lang-en-red.svg" alt="English" />
   </a>
