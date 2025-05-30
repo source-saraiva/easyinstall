@@ -1,4 +1,4 @@
-&nbsp;&nbsp;&nbsp;&nbsp; [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
 [![pt-AO](https://img.shields.io/badge/lang-pt--AO-green.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md)
 
 # 🧰 easyinstall
