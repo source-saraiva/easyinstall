@@ -16,7 +16,7 @@ Configurar um servidor Linux para funções específicas (como DHCP, DNS, gestã
   - **Servidor DHCP**
   - **Servidor GLPI** (Gestão de Ativos de TI)
   - **Servidor BIND9** (DNS)
-  - *(Mais em breve!)*  
+  - *(Mais opções em breve!)*  
 - ⚙️ Base de scripts limpa, modular e fácil de expandir
 - 🧪 Compatível com sistemas baseados em Debian e RHEL
 - 🧑‍💻 Ideal para sysadmins, estudantes e equipes de TI em laboratórios ou ambientes de produção
