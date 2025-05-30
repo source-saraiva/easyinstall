@@ -2,7 +2,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.md)
 [![pt-AO](https://img.shields.io/badge/lang-pt--ao-green.svg)](https://github.com/source-saraiva/easyinstall/blob/main/README.pt-AO.md)
 
----
+
 # 🧰 easyinstall
 
 **easyinstall** is a collection of scripts that simplifies the installation and configuration of common packages on Linux servers. Inspired by the "Add Roles and Features" wizard in Microsoft Windows Server, easyinstall offers a similar experience for Linux system administrators.
