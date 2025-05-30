@@ -1,4 +1,7 @@
-🌐 [🇬🇧](README.md) [🇦🇴](README.pt.md)</p>
+<p align="right">
+  🌐 <a href="README.md">🇬🇧</a> <a href="README.pt.md">🇦🇴</a>
+</p>
+
 
 # 🧰 easyinstall
 
