@@ -1,7 +1,8 @@
 <p align="right">
   🌐 <a href="README.md">🇬🇧</a> <a href="README.pt.md">🇦🇴</a>
 </p>
-🇦🇴 **Angola**🌐 **Languages**: [🇬🇧 English](README.md) | [🇦🇴 Português (Angola)](README.pt.md)
+
+![United States](https://github.com/madebybowtie/FlagKit/blob/master/Assets/Flags/US.png)
 
 # 🧰 easyinstall
 
