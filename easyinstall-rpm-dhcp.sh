@@ -1,4 +1,4 @@
-#!/bin/bash
+s#!/bin/bash
 
 # Create a echo yellow
 echoyellow() {
@@ -6,7 +6,7 @@ echoyellow() {
 }
 
 
-echoyellow "=== DHCP Server Setup Script (easyinstall) ==="
+echoyellow "=== Easy Install Script (DHCP Server Setup) ==="
 echoyellow "This script will install and configure a DHCP server."
 
 # Ask for user input
