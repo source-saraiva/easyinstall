@@ -19,7 +19,7 @@ Setting up a Linux server for specific roles (such as DHCP, DNS, IT asset manage
   * **DHCP Server**
   * **GLPI Server** (IT Asset Management)
   * **BIND9 Server** (DNS)
-  * *(More options coming soon!)*
+  * *and many more options!*
 * ⚙️ Clean, modular, and easily extensible script base
 * 🧪 Compatible with RHEL-based and in the future Debian-based systems
 * 🧑‍💻 Ideal for sysadmins, students, and IT teams in labs or production environments
