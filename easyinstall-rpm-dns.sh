@@ -31,7 +31,7 @@ DOMAIN_SUGGEST=$(hostname -d)
 prompt_nonempty DOMAIN "Enter your domain name (e.g., ${DOMAIN_SUGGEST}): "
 read -p "Enter your DNS server IP [default: ${DEFAULT_IP}]: " DNS_IP
 DNS_IP=${DNS_IP:-$DEFAULT_IP}
-prompt_nonempty ADMIN_EMAIL "Enter admin email (e.g., admin.mydomain.local - replace @ with .): "
+prompt_nonempty ADMIN_EMAIL "Enter admin email (e.g., admin.${DOMAIN_SUGGEST} - replace @ with .): "
 
 ZONE_FILE="/var/named/${DOMAIN}.zone"
 
