@@ -3,7 +3,7 @@
 # Verbose mode on
 set -x
 
-echo "=== DHCP Server Setup Script (Linux with DNF) ==="
+echo "=== DHCP Server Setup Script (easyinstall) ==="
 echo "This script will install and configure a DHCP server."
 
 # Ask for user input
