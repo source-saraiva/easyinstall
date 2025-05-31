@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Verbose mode on
-set -x
+# Create a echo yellow
+echoyellow() {
+    echo -e "\e[33m$1\e[0m"
+}
 
-echo "=== DHCP Server Setup Script (easyinstall) ==="
-echo "This script will install and configure a DHCP server."
+
+echoyellow "=== DHCP Server Setup Script (easyinstall) ==="
+echoyellow "This script will install and configure a DHCP server."
 
 # Ask for user input
 read -p "Enter your domain name (e.g., srv.world): " DOMAIN_NAME
