@@ -57,7 +57,7 @@ firewall-cmd --runtime-to-permanent
 echogreen"=== DHCP server setup completed. ==="
 echoblue ">>> INFORMATION."
 echoblue "You can view logs here:"
-echoblue "  cat /var/lib/dhcpd/dhcpd.leases"
+echoblue " journalctl -u dhcpd -f"
 echoblue "You can view active DHCP leases here:"
 echoblue "  cat /var/lib/dhcpd/dhcpd.leases"
 echoblue "Commands:"
