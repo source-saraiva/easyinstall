@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 # Create a echo yellow
 echoyellow() { echo -e "\e[33m$1\e[0m"; }
