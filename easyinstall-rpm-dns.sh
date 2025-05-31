@@ -1,23 +1,37 @@
 #!/bin/bash
 
-# Funções de cores
+# === Funções de Estilo ===
 echoyellow() { echo -e "\e[33m$1\e[0m"; }
 echored()    { echo -e "\e[31m$1\e[0m"; }
 echogreen()  { echo -e "\e[32m$1\e[0m"; }
 echoblue()   { echo -e "\e[94m$1\e[0m"; }
 echocyan()   { echo -e "\e[36m$1\e[0m"; }
 
+prompt_nonempty() {
+    local prompt="$1"
+    local value=""
+    while [[ -z "$value" ]]; do
+        read -p "$prompt" value
+        if [[ -z "$value" ]]; then
+            echored "Input cannot be empty. Please try again."
+        fi
+    done
+    echo "$value"
+}
+
 echoyellow "=== Easy Install Script (DNS Server Setup with BIND9) ==="
 echoyellow "This script will install and configure a BIND9 DNS server on RPM-based systems."
 
-# Detectar IP local baseado na rota de saída
+# Detectar IP local e domínio base
 DEFAULT_IP=$(ip route get 1.1.1.1 | awk '/src/ {print $7; exit}')
+DEFAULT_DOMAIN="example.local"
+DEFAULT_EMAIL="admin.example.local"
 
-# Entrada do usuário
-read -p "Enter your domain name (e.g., mydomain.local): " DOMAIN
+# Solicitar dados ao utilizador com sugestões
+DOMAIN=$(prompt_nonempty "Enter your domain name (e.g., ${DEFAULT_DOMAIN}): ")
 read -p "Enter your DNS server IP [default: ${DEFAULT_IP}]: " DNS_IP
 DNS_IP=${DNS_IP:-$DEFAULT_IP}
-read -p "Enter admin email (e.g., admin.mydomain.local - replace @ with .): " ADMIN_EMAIL
+ADMIN_EMAIL=$(prompt_nonempty "Enter admin email (e.g., admin.mydomain.local - replace @ with .): ")
 
 ZONE_FILE="/var/named/${DOMAIN}.zone"
 
@@ -49,7 +63,7 @@ echoyellow ">>> Creating zone file for ${DOMAIN}..."
 cat <<EOF > ${ZONE_FILE}
 \$TTL 86400
 @   IN  SOA     ns1.${DOMAIN}. ${ADMIN_EMAIL}. (
-                2025053101 ; Serial
+                $(date +%Y%m%d)01 ; Serial
                 3600       ; Refresh
                 1800       ; Retry
                 1209600    ; Expire
@@ -85,5 +99,5 @@ echogreen "    /var/named/"
 echogreen "Configuration file:"
 echogreen "    /etc/named.conf"
 echogreen ""
-echogreen "more scripts @ https://github.com/source-saraiva/easyinstall/"
+echogreen "More scripts @ https://github.com/source-saraiva/easyinstall/"
 echogreen "--------------------------------------"
