@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# === Funções de Estilo ===
+# === Style Functions ===
 echoyellow() { echo -e "\e[33m$1\e[0m"; }
 echored()    { echo -e "\e[31m$1\e[0m"; }
 echogreen()  { echo -e "\e[32m$1\e[0m"; }
 echoblue()   { echo -e "\e[94m$1\e[0m"; }
 echocyan()   { echo -e "\e[36m$1\e[0m"; }
 
-# Função para entrada obrigatória (com passagem por referência)
+# Function for mandatory input (by reference)
 prompt_nonempty() {
     local __resultvar=$1
     local prompt="$2"
@@ -24,10 +24,11 @@ prompt_nonempty() {
 echoyellow "=== Easy Install Script (DNS Server Setup with BIND9) ==="
 echoyellow "This script will install and configure a BIND9 DNS server on RPM-based systems."
 
-# Detectar IP local e domínio base
+# Detect local IP and suggested domain
 DEFAULT_IP=$(ip route get 1.1.1.1 | awk '/src/ {print $7; exit}')
 DOMAIN_SUGGEST=$(hostname -d)
-# Solicitar dados ao utilizador com sugestões
+
+# Prompt user for inputs with suggestions
 prompt_nonempty DOMAIN "Enter your domain name (e.g., ${DOMAIN_SUGGEST}): "
 read -p "Enter your DNS server IP [default: ${DEFAULT_IP}]: " DNS_IP
 DNS_IP=${DNS_IP:-$DEFAULT_IP}
