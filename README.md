@@ -42,6 +42,5 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 ### DHCP Server
 **RPM-based systems**
 ```bash
-
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-dhcp.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 ```
