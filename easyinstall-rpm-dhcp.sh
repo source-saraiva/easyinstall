@@ -4,7 +4,7 @@ s#!/bin/bash
 echoyellow() { echo -e "\e[33m$1\e[0m"; }
 echored()    { echo -e "\e[31m$1\e[0m"; }
 echogreen()  { echo -e "\e[32m$1\e[0m"; }
-echoblue()   { echo -e "\e[34m$1\e[0m"; }
+echoblue()   { echo -e "\e[94m$1\e[0m"; }
 echocyan()   { echo -e "\e[36m$1\e[0m"; }
 
 echoyellow "=== Easy Install Script (DHCP Server Setup) ==="
@@ -54,7 +54,7 @@ echoyellow ">>> Configuring firewall to allow DHCP traffic..."
 firewall-cmd --add-service=dhcp
 firewall-cmd --runtime-to-permanent
 
-echogreen"=== DHCP server setup completed. ==="
+echogreen "=== DHCP server setup completed. ==="
 echoblue ">>> INFORMATION."
 echoblue "You can view logs here:"
 echoblue " journalctl -u dhcpd -f"
