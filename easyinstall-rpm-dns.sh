@@ -26,9 +26,9 @@ echoyellow "This script will install and configure a BIND9 DNS server on RPM-bas
 
 # Detectar IP local e domínio base
 DEFAULT_IP=$(ip route get 1.1.1.1 | awk '/src/ {print $7; exit}')
-
+DOMAIN_SUGGEST=$(hostname -d)
 # Solicitar dados ao utilizador com sugestões
-prompt_nonempty DOMAIN "Enter your domain name (e.g., vlan.lan): "
+prompt_nonempty DOMAIN "Enter your domain name (e.g., ${DOMAIN_SUGGEST}): "
 read -p "Enter your DNS server IP [default: ${DEFAULT_IP}]: " DNS_IP
 DNS_IP=${DNS_IP:-$DEFAULT_IP}
 prompt_nonempty ADMIN_EMAIL "Enter admin email (e.g., admin.mydomain.local - replace @ with .): "
