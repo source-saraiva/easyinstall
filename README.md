@@ -37,3 +37,10 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 # For Deb
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-deb-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 ```
+## 📦 Available Roles
+
+### DHCP Server
+```bash
+# RPM-based systems
+u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-dhcp.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
+```
