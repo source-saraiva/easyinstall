@@ -99,6 +99,7 @@ firewall-cmd --runtime-to-permanent
 echogreen ""
 echogreen "DHCP Server installed successfully!"
 echogreen "--------------------------------------"
+echogreen "Save this information"
 echogreen "To check DHCP server status:"
 echogreen "    systemctl status dhcpd"
 echogreen "To view real-time logs:"
