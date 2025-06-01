@@ -39,13 +39,24 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 ```
 ## 📦 Available Roles
 
+RPM scripts tested on almalinux 9 - [AlmaLinux OS 9.6 Minimal ISO](https://almalinux.org/get-almalinux/) 
+
 ### DHCP Server
 **RPM-based systems**
 ```bash
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-dhcp.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 ```
+
 ### DNS Server
 **RPM-based systems**
 ```bash
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-dns.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 ```
+
+### Guacamole Server
+**RPM-based systems**
+```bash
+u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-guacamole.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
+```
+Credits:
+[Christian Wells](https://shape.host/resources/how-to-set-up-a-remote-desktop-gateway-with-apache-guacamole-on-almalinux-9)
