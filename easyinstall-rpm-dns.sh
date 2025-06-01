@@ -88,6 +88,7 @@ firewall-cmd --runtime-to-permanent
 echogreen ""
 echogreen "DNS Server installed successfully!"
 echogreen "--------------------------------------"
+echogreen "Save this information"
 echogreen "To test your DNS server, use:"
 echogreen "    dig @${DNS_IP} SOA ${DOMAIN}"
 echogreen "    dig -x ${DNS_IP}"
