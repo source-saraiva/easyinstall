@@ -43,6 +43,9 @@ DEFAULT_LEASE_DEFAULT="86400"
 MAX_LEASE_DEFAULT="604800"
 
 echoyellow "=== Easy Install Script (DHCP Server Setup) ==="
+echoyellow "This script will install and configure a DHCP server on RPM-based systems."
+
+
 echoyellow "Detected IP address: $USER_IP on interface $ACTIVE_IFACE"
 echoyellow "Suggested values are based on current network configuration."
 
