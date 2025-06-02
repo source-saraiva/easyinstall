@@ -106,7 +106,7 @@ sudo chmod 640 /etc/guacamole/guacamole.properties
 
 # === NGINX ===
 sudo dnf install nginx -y
-echoyellow "Please enter the URL you will use to access Guacamole (leave blank to use \\$(hostname -f)):"
+echoyellow "Please enter the URL you will use to access Guacamole (leave blank to use  \\$(hostname -f)):"
 read -r ACCESS_URL
 [ -z "$ACCESS_URL" ] && ACCESS_URL=$(hostname -f)
 
@@ -161,7 +161,7 @@ sudo systemctl restart fail2ban
 
 # === DISPLAY FINAL URL ===
 SERVER_IP=$(hostname -I | awk '{print $1}')
-echo -e "\e[1;33m>>> Guacamole is available at: http://${SERVER_IP}:8080/guacamole\e[0m"
+
 
 # === USEFUL INFORMATION ===
 echogreen ""
@@ -171,7 +171,7 @@ echogreen "Save this information"
 echogreen "Guacamole is available at:"
 echogreen "    tomcat http://${SERVER_IP}:8080/guacamole"
 echogreen "    ngnix  http://${SERVER_IP} or  http://${ACCESS_URL}"
-echogreen "    user:guacadmin pass:guacadmin"
+echogreen "    user: guacadmin pass: guacadmin"
 echogreen "Mysql credentials:"
 echogreen "    u: guacamole_user p: ${SOLUTIONS_DB_PASS} database: guacamole_db"
 echogreen "    user: root pass: ${MYSQL_ROOT_PASS}"
