@@ -1,3 +1,17 @@
+#!/bin/bash
+
+# === Style Functions ===
+echoyellow() { echo -e "\e[33m$1\e[0m"; }
+echored()    { echo -e "\e[31m$1\e[0m"; }
+echogreen()  { echo -e "\e[32m$1\e[0m"; }
+echoblue()   { echo -e "\e[94m$1\e[0m"; }
+echocyan()   { echo -e "\e[36m$1\e[0m"; }
+
+# === MOTD ===
+echoyellow "=== Easy Install Script (APACHE GUACAMOLE) ==="
+echoyellow "This script will install and configure an apache guacamole gateway server on RPM-based systems."
+
+
 # === REPOSITORIES ===
 sudo dnf config-manager --set-enabled crb
 sudo dnf install -y epel-release
@@ -101,3 +115,30 @@ sudo systemctl restart tomcat
 # === DISPLAY FINAL URL ===
 SERVER_IP=$(hostname -I | awk '{print $1}')
 echo -e "\e[1;33m>>> Guacamole is available at: http://${SERVER_IP}:8080/guacamole\e[0m"
+
+# === USEFULL INFORMATION ===
+
+echogreen ""
+echogreen "Guacamole Server installed successfully!"
+echogreen "--------------------------------------"
+echogreen "Save this information"
+echogreen "Guacamole is available at:"
+echogreen "    http://${SERVER_IP}:8080/guacamole"
+echogreen "    user:guacadmin pass:guacadmin"
+echogreen "Mysql credentials:"
+echogreen "    u:guacamole_user p:${SOLUTIONS_DB_PASS} database:guacamole_db"
+echogreen "    user:root pass:${MYSQL_ROOT_PASS}"
+echogreen "To check service status:"
+echogreen "    systemctl status ngnix"
+echogreen "    systemctl status guacd"
+echogreen "    systemctl status tomcat"
+echogreen "    systemctl status mariadb"
+echogreen "To view logs:"
+echogreen "    journalctl -u guacd"
+echogreen "    journalctl -u guacd -f"
+echogreen "Configuration files:"
+echogreen "    /etc/guacamole/guacamole.properties"
+echogreen ""
+echogreen "--------------------------------------"
+echogreen "More scripts @ https://github.com/source-saraiva/easyinstall/"
+echogreen "--------------------------------------"
