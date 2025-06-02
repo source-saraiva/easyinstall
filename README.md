@@ -59,4 +59,4 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-guacamole.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && bash ei.sh
 ```
 Credits:
-[r00t]([https://shape.host/resources/how-to-set-up-a-remote-desktop-gateway-with-apache-guacamole-on-almalinux-9](https://idroot.us/install-apache-guacamole-almalinux-9)
+[r00t](https://idroot.us/install-apache-guacamole-almalinux-9)
