@@ -7,6 +7,13 @@ echogreen()  { echo -e "\e[32m$1\e[0m"; }
 echoblue()   { echo -e "\e[94m$1\e[0m"; }
 echocyan()   { echo -e "\e[36m$1\e[0m"; }
 
+
+# === MOTD ===
+echoyellow "=== Easy Install Script (DHCP) ==="
+echoyellow "This script will install and configure a DHCP server on RPM-based systems."
+
+
+
 # Função para validar entrada com valor padrão
 prompt_nonempty_default() {
     local prompt="$1"
@@ -97,6 +104,8 @@ systemctl enable --now dhcpd
 echoyellow ">>> Configuring firewall to allow DHCP traffic..."
 firewall-cmd --add-service=dhcp
 firewall-cmd --runtime-to-permanent
+
+# === USEFULL INFORMATION ===
 
 # Finalização
 echogreen ""
