@@ -11,22 +11,18 @@ echocyan()   { echo -e "\e[36m$1\e[0m"; }
 echoyellow "=== Easy Install Script (APACHE GUACAMOLE) ==="
 echoyellow "This script will install and configure an apache guacamole gateway server on RPM-based systems."
 
-
 # === REPOSITORIES ===
 sudo dnf config-manager --set-enabled crb
 sudo dnf install -y epel-release
 sudo dnf update -y
 
-
 # === UTILITIES ===
 sudo dnf install -y wget curl tar unzip nano vim dnf-plugins-core
-
 
 # === FIREWALL ===
 sudo firewall-cmd --add-service={http,https} --permanent
 sudo firewall-cmd --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
-
 
 # === DEPENDENCIES ===
 sudo dnf install -y gcc make cairo-devel libjpeg-turbo-devel \
@@ -35,13 +31,11 @@ pango-devel libssh2-devel libvncserver-devel libwebsockets-devel \
 freerdp-devel libvorbis-devel libwebp-devel pulseaudio-libs-devel \
 uuid-devel ffmpeg-devel
 
-
 # === JAVA & TOMCAT ===
 sudo dnf install -y java-11-openjdk-devel tomcat 
 
 sudo sed -i 's|^JAVA_OPTS=.*|#&\nJAVA_OPTS="-Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m"|' /etc/tomcat/tomcat.conf
 sudo systemctl enable --now tomcat
-
 
 # === MYSQL / MARIADB ===
 echo -e "\e[1;33m>>> Installing and securing MariaDB...\e[0m"
@@ -60,7 +54,6 @@ mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE DATABASE guacamole_db;"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE OR REPLACE USER 'guacamole_user'@'localhost' IDENTIFIED BY '${SOLUTIONS_DB_PASS}';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "GRANT ALL PRIVILEGES ON guacamole_db.* TO 'guacamole_user'@'localhost';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
-
 
 # === GUACAMOLE INSTALLATION ===
 cd /tmp
@@ -95,7 +88,6 @@ cd guacamole-auth-jdbc-1.5.5/mysql/schema
 mysql -u guacamole_user -p"${SOLUTIONS_DB_PASS}" guacamole_db < 001-create-schema.sql
 mysql -u guacamole_user -p"${SOLUTIONS_DB_PASS}" guacamole_db < 002-create-admin-user.sql
 
-
 # === GUACAMOLE CONFIGURATION ===
 cat <<EOF | sudo tee /etc/guacamole/guacamole.properties
 # Guacamole proxy configuration
@@ -110,26 +102,81 @@ mysql-username: guacamole_user
 mysql-password: ${SOLUTIONS_DB_PASS}
 EOF
 
-sudo systemctl restart tomcat
+sudo chmod 640 /etc/guacamole/guacamole.properties
+
+# === NGINX ===
+sudo dnf install nginx -y
+echoyellow "Please enter the URL you will use to access Guacamole (leave blank to use \\$(hostname -f)):"
+read -r ACCESS_URL
+[ -z "$ACCESS_URL" ] && ACCESS_URL=$(hostname -f)
+
+cat <<EOF | sudo tee /etc/nginx/conf.d/guacamole.conf
+server {
+    listen 80;
+    server_name \${SERVER_IP} \${ACCESS_URL};
+
+    access_log /var/log/nginx/guacamole_access.log;
+    error_log /var/log/nginx/guacamole_error.log;
+
+    location / {
+        proxy_pass http://localhost:8080/guacamole/;
+        proxy_buffering off;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$host;
+        client_max_body_size 0;
+    }
+}
+EOF
+
+sudo setsebool -P httpd_can_network_connect 1
+sudo nginx -t
+sudo systemctl enable --now nginx
+
+# === FAIL2BAN ===
+sudo dnf install fail2ban -y
+sudo systemctl enable --now fail2ban
+sudo systemctl start fail2ban
+
+cat <<EOF | sudo tee /etc/fail2ban/filter.d/guacamole.conf
+[Definition]
+datepattern = %%Y-%%m-%%d %%H:%%M:%%S
+failregex = ^.*WARNING.*Authentication attempt from .* for user "[^"]*" failed\.
+ignoreregex =
+EOF
+
+cat <<EOF | sudo tee /etc/fail2ban/jail.d/guacamole.conf
+[guacamole]
+enabled = true
+port = http,https
+filter = guacamole
+logpath = /var/log/tomcat/catalina.out
+maxretry = 3
+bantime = 3600
+EOF
+
+sudo systemctl restart fail2ban
 
 # === DISPLAY FINAL URL ===
 SERVER_IP=$(hostname -I | awk '{print $1}')
 echo -e "\e[1;33m>>> Guacamole is available at: http://${SERVER_IP}:8080/guacamole\e[0m"
 
-# === USEFULL INFORMATION ===
-
+# === USEFUL INFORMATION ===
 echogreen ""
 echogreen "Guacamole Server installed successfully!"
 echogreen "--------------------------------------"
 echogreen "Save this information"
 echogreen "Guacamole is available at:"
-echogreen "    http://${SERVER_IP}:8080/guacamole"
+echogreen "    tomcat http://${SERVER_IP}:8080/guacamole"
+echogreen "    ngnix  http://${SERVER_IP} or  http://${ACCESS_URL}"
 echogreen "    user:guacadmin pass:guacadmin"
 echogreen "Mysql credentials:"
 echogreen "    u: guacamole_user p: ${SOLUTIONS_DB_PASS} database: guacamole_db"
 echogreen "    user: root pass: ${MYSQL_ROOT_PASS}"
 echogreen "To check service status:"
-echogreen "    systemctl status ngnix"
+echogreen "    systemctl status nginx"
 echogreen "    systemctl status guacd"
 echogreen "    systemctl status tomcat"
 echogreen "    systemctl status mariadb"
@@ -138,6 +185,8 @@ echogreen "    journalctl -u guacd"
 echogreen "    journalctl -u guacd -f"
 echogreen "Configuration files:"
 echogreen "    /etc/guacamole/guacamole.properties"
+echocyan  "In production block acess to port 8080 "
+echocyan  "sudo firewall-cmd --permanent --remove-port=8080/tcp"
 echogreen ""
 echogreen "--------------------------------------"
 echogreen "More scripts @ https://github.com/source-saraiva/easyinstall/"
