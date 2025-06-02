@@ -11,18 +11,22 @@ echocyan()   { echo -e "\e[36m$1\e[0m"; }
 echoyellow "=== Easy Install Script (APACHE GUACAMOLE) ==="
 echoyellow "This script will install and configure an apache guacamole gateway server on RPM-based systems."
 
+
 # === REPOSITORIES ===
 sudo dnf config-manager --set-enabled crb
 sudo dnf install -y epel-release
 sudo dnf update -y
 
+
 # === UTILITIES ===
 sudo dnf install -y wget curl tar unzip nano vim dnf-plugins-core
+
 
 # === FIREWALL ===
 sudo firewall-cmd --add-service={http,https} --permanent
 sudo firewall-cmd --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
+
 
 # === DEPENDENCIES ===
 sudo dnf install -y gcc make cairo-devel libjpeg-turbo-devel \
@@ -31,11 +35,13 @@ pango-devel libssh2-devel libvncserver-devel libwebsockets-devel \
 freerdp-devel libvorbis-devel libwebp-devel pulseaudio-libs-devel \
 uuid-devel ffmpeg-devel
 
+
 # === JAVA & TOMCAT ===
 sudo dnf install -y java-11-openjdk-devel tomcat 
 
 sudo sed -i 's|^JAVA_OPTS=.*|#&\nJAVA_OPTS="-Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m"|' /etc/tomcat/tomcat.conf
 sudo systemctl enable --now tomcat
+
 
 # === MYSQL / MARIADB ===
 echo -e "\e[1;33m>>> Installing and securing MariaDB...\e[0m"
@@ -55,9 +61,15 @@ mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE OR REPLACE USER 'guacamole_user'@
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "GRANT ALL PRIVILEGES ON guacamole_db.* TO 'guacamole_user'@'localhost';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
 
+
 # === GUACAMOLE INSTALLATION ===
 cd /tmp
+if [ ! -f "guacamole-server-1.5.5.tar.gz" ]; then
 wget https://dlcdn.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz
+else
+  echogreen "guacamole-server-1.5.5.tar.gz already exists. Skipping download."
+fi
+
 tar -xf guacamole-server-1.5.5.tar.gz
 cd guacamole-server-1.5.5/
 ./configure --with-systemd-dir=/etc/systemd/system/
@@ -67,7 +79,12 @@ sudo ldconfig
 sudo systemctl enable --now guacd
 
 cd /tmp
+if [ ! -f "guacamole-1.5.5.war" ]; then
 wget https://dlcdn.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war
+else
+  echogreen "guacamole-1.5.5.war already exists. Skipping download."
+fi
+
 sudo mkdir -p /etc/guacamole/{extensions,lib}
 sudo cp guacamole-1.5.5.war /var/lib/tomcat/webapps/guacamole.war
 sudo ln -s /etc/guacamole /usr/share/tomcat/.guacamole
@@ -75,18 +92,29 @@ echo "GUACAMOLE_HOME=/etc/guacamole" | sudo tee -a /etc/default/tomcat
 
 # === DATABASE AUTH MODULE ===
 cd /tmp
+if [ ! -f "guacamole-auth-jdbc-1.5.5.tar.gz" ]; then
 wget https://dlcdn.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz
-tar -xf guacamole-auth-jdbc-1.5.5.tar.gz
+else
+  echogreen "guacamole-auth-jdbc-1.5.5.tar.gz already exists. Skipping download."
+fi
 
+tar -xf guacamole-auth-jdbc-1.5.5.tar.gz
+sudo cp guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/
+
+if [ ! -f "mysql-connector-j-8.0.32.tar.gz" ]; then
 wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-8.0.32.tar.gz
+else
+  echogreen "mysql-connector-j-8.0.32.tar.gz already exists. Skipping download."
+fi
 tar -xf mysql-connector-j-8.0.32.tar.gz
 sudo cp mysql-connector-j-8.0.32/mysql-connector-j-8.0.32.jar /etc/guacamole/lib/
-sudo cp guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/
+
 
 # === SCHEMA CREATION ===
 cd guacamole-auth-jdbc-1.5.5/mysql/schema
 mysql -u guacamole_user -p"${SOLUTIONS_DB_PASS}" guacamole_db < 001-create-schema.sql
 mysql -u guacamole_user -p"${SOLUTIONS_DB_PASS}" guacamole_db < 002-create-admin-user.sql
+
 
 # === GUACAMOLE CONFIGURATION ===
 cat <<EOF | sudo tee /etc/guacamole/guacamole.properties
@@ -102,11 +130,14 @@ mysql-username: guacamole_user
 mysql-password: ${SOLUTIONS_DB_PASS}
 EOF
 
-sudo chmod 640 /etc/guacamole/guacamole.properties
+sudo systemctl restart tomcat
+
+# === DISPLAY FINAL URL ===
+SERVER_IP=$(hostname -I | awk '{print $1}')
 
 # === NGINX ===
 sudo dnf install nginx -y
-echoyellow "Please enter the URL you will use to access Guacamole (leave blank to use  \\$(hostname -f)):"
+echoyellow "Please enter the URL you will use to access Guacamole (leave blank to use $(hostname -f)):"
 read -r ACCESS_URL
 [ -z "$ACCESS_URL" ] && ACCESS_URL=$(hostname -f)
 
@@ -135,32 +166,37 @@ sudo setsebool -P httpd_can_network_connect 1
 sudo nginx -t
 sudo systemctl enable --now nginx
 
-# === FAIL2BAN ===
-sudo dnf install fail2ban -y
-sudo systemctl enable --now fail2ban
-sudo systemctl start fail2ban
 
-cat <<EOF | sudo tee /etc/fail2ban/filter.d/guacamole.conf
+# === FAIL2BAN ===
+
+# Instalar Fail2Ban
+sudo dnf install fail2ban -y
+
+# Habilitar e iniciar o serviço
+sudo systemctl enable --now fail2ban
+
+# Criar o filtro do Guacamole
+cat <<'EOF' | sudo tee /etc/fail2ban/filter.d/guacamole-journal.conf
 [Definition]
-datepattern = %%Y-%%m-%%d %%H:%%M:%%S
-failregex = ^.*WARNING.*Authentication attempt from .* for user "[^"]*" failed\.
+failregex = Authentication attempt from \[<HOST>.*\] for user .* failed
 ignoreregex =
 EOF
 
-cat <<EOF | sudo tee /etc/fail2ban/jail.d/guacamole.conf
-[guacamole]
+# Criar a jail do Guacamole
+cat <<EOF | sudo tee /etc/fail2ban/jail.d/guacamole-journal.conf
+[guacamole-journal]
 enabled = true
-port = http,https
-filter = guacamole
-logpath = /var/log/tomcat/catalina.out
-maxretry = 3
+filter = guacamole-journal
+backend = systemd
+journalmatch = _SYSTEMD_UNIT=tomcat.service
+maxretry = 5
 bantime = 3600
+findtime = 3600
 EOF
 
+# Reiniciar o serviço para aplicar as alterações
 sudo systemctl restart fail2ban
 
-# === DISPLAY FINAL URL ===
-SERVER_IP=$(hostname -I | awk '{print $1}')
 
 
 # === USEFUL INFORMATION ===
@@ -187,6 +223,8 @@ echogreen "Configuration files:"
 echogreen "    /etc/guacamole/guacamole.properties"
 echocyan  "In production block acess to port 8080 "
 echocyan  "sudo firewall-cmd --permanent --remove-port=8080/tcp"
+echogreen "View banned IPs"
+echogreen "	sudo fail2ban-client status guacamole-journal"
 echogreen ""
 echogreen "--------------------------------------"
 echogreen "More scripts @ https://github.com/source-saraiva/easyinstall/"
