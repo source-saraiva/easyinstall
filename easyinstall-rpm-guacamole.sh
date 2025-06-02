@@ -45,7 +45,7 @@ sudo dnf config-manager --set-enabled crb
 sudo dnf update -y
 # === UTILITIES ===
 echoyellow ">>> Installing utilities..."
-sudo dnf install -y wget nano dnf-utils
+sudo dnf install -y wget nano dnf-utils unzip
 
 # === DEPENDENCIES ===
 echoyellow ">>> Installing dependencies..."
@@ -53,7 +53,7 @@ sudo dnf install -y cairo-devel libjpeg-turbo-devel libjpeg-devel libpng-devel \
     libtool libuuid-devel uuid-devel make cmake ffmpeg ffmpeg-devel freerdp-devel \
     pango-devel libssh2-devel libtelnet-devel libvncserver-devel libwebsockets-devel \
     pulseaudio-libs-devel openssl-devel compat-openssl11 libvorbis-devel \
-    libwebp-devel libgcrypt-devel
+    libwebp-devel libgcrypt-devel libtool-ltdl-devel
 
 # === JAVA & TOMCAT ===
 echoyellow ">>> Installing Java and Tomcat..."
