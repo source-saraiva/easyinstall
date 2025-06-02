@@ -1,170 +1,103 @@
-#!/bin/bash
+# === REPOSITORIES ===
+sudo dnf config-manager --set-enabled crb
+sudo dnf install -y epel-release
+sudo dnf update -y
 
-# === Style Functions ===
-echoyellow() { echo -e "\e[33m$1\e[0m"; }
-echored()    { echo -e "\e[31m$1\e[0m"; }
-echogreen()  { echo -e "\e[32m$1\e[0m"; }
-echoblue()   { echo -e "\e[94m$1\e[0m"; }
-echocyan()   { echo -e "\e[36m$1\e[0m"; }
 
-# Prompt function with default
-prompt_nonempty_default() {
-    local prompt="$1"
-    local default="$2"
-    local var
-    while true; do
-        read -p "$prompt [$default]: " var
-        var="${var:-$default}"
-        if [[ -n "$var" ]]; then
-            echo "$var"
-            break
-        else
-            echored "Input cannot be empty. Please try again."
-        fi
-    done
-}
+# === UTILITIES ===
+sudo dnf install -y wget curl tar unzip nano vim dnf-plugins-core
 
-# === Guacamole Easy Installer ===
-echoyellow "=== Easy Install Script (Apache Guacamole on AlmaLinux) ==="
-
-# Detect IP address
-SERVER_IP=$(ip route get 1.1.1.1 | awk '/src/ {print $7; exit}')
-SERVER_IP=$(prompt_nonempty_default "Enter your server's public IP" "$SERVER_IP")
 
 # === FIREWALL ===
-echoyellow ">>> Configuring firewall..."
 sudo firewall-cmd --add-service={http,https} --permanent
+sudo firewall-cmd --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
 
-# === REPOSITORY ===
-echoyellow ">>> Enabling repositories..."
-sudo dnf install -y epel-release
-sudo dnf install -y https://download1.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
-sudo dnf config-manager --set-enabled crb
-sudo dnf update -y
-# === UTILITIES ===
-echoyellow ">>> Installing utilities..."
-sudo dnf install -y wget nano dnf-utils unzip
 
 # === DEPENDENCIES ===
-echoyellow ">>> Installing dependencies..."
-sudo dnf install -y cairo-devel libjpeg-turbo-devel libjpeg-devel libpng-devel \
-    libtool libuuid-devel uuid-devel make cmake ffmpeg ffmpeg-devel freerdp-devel \
-    pango-devel libssh2-devel libtelnet-devel libvncserver-devel libwebsockets-devel \
-    pulseaudio-libs-devel openssl-devel compat-openssl11 libvorbis-devel \
-    libwebp-devel libgcrypt-devel libtool-ltdl-devel
+sudo dnf install -y gcc make cairo-devel libjpeg-turbo-devel \
+libpng-devel libtool-ltdl-devel libuuid-devel openssl-devel \
+pango-devel libssh2-devel libvncserver-devel libwebsockets-devel \
+freerdp-devel libvorbis-devel libwebp-devel pulseaudio-libs-devel \
+uuid-devel ffmpeg-devel
+
 
 # === JAVA & TOMCAT ===
-echoyellow ">>> Installing Java and Tomcat..."
-sudo dnf install -y java-11-openjdk-devel tomcat
+sudo dnf install -y java-11-openjdk-devel tomcat 
 
-# === MARIADB SETUP ===
-echoyellow ">>> Installing and securing MariaDB..."
+sudo sed -i 's|^JAVA_OPTS=.*|#&\nJAVA_OPTS="-Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m"|' /etc/tomcat/tomcat.conf
+sudo systemctl enable --now tomcat
+
+
+# === MYSQL / MARIADB ===
+echo -e "\e[1;33m>>> Installing and securing MariaDB...\e[0m"
 MYSQL_ROOT_PASS=$(openssl rand -base64 16)
 SOLUTIONS_DB_PASS=$(openssl rand -base64 16)
+
 sudo dnf install -y mariadb-server
-systemctl enable --now mariadb
+sudo systemctl enable --now mariadb
 
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASS}';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "DELETE FROM mysql.user WHERE User='';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "DROP DATABASE IF EXISTS test;"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
 
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE DATABASE guacamoledb;"
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE USER 'guacamole'@'localhost' IDENTIFIED BY '${SOLUTIONS_DB_PASS}';"
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "GRANT SELECT,INSERT,UPDATE,DELETE ON guacamoledb.* TO 'guacamole'@'localhost';"
+mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE DATABASE guacamole_db;"
+mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE OR REPLACE USER 'guacamole_user'@'localhost' IDENTIFIED BY '${SOLUTIONS_DB_PASS}';"
+mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "GRANT ALL PRIVILEGES ON guacamole_db.* TO 'guacamole_user'@'localhost';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
 
-# === GUACAMOLE SERVER INSTALL ===
-echoyellow ">>> Installing Guacamole server..."
-cd /usr/src
+
+# === GUACAMOLE INSTALLATION ===
+cd /tmp
 wget https://dlcdn.apache.org/guacamole/1.5.5/source/guacamole-server-1.5.5.tar.gz
-
 tar -xf guacamole-server-1.5.5.tar.gz
-cd guacamole-server-*/
+cd guacamole-server-1.5.5/
 ./configure --with-systemd-dir=/etc/systemd/system/
-make && make install
-ldconfig
+make
+sudo make install
+sudo ldconfig
+sudo systemctl enable --now guacd
 
-mkdir -p /etc/guacamole/
-cat <<EOF > /etc/guacamole/guacd.conf
-[server]
-bind_host = 127.0.0.1
-bind_port = 4822
-EOF
-
-systemctl daemon-reload
-systemctl enable --now guacd
-
-# === GUACAMOLE WEBAPP ===
-echoyellow ">>> Deploying Guacamole web app..."
-cd /usr/src
+cd /tmp
 wget https://dlcdn.apache.org/guacamole/1.5.5/binary/guacamole-1.5.5.war
-cp guacamole-1.5.5.war /var/lib/tomcat/webapps/guacamole.war
-systemctl restart tomcat
+sudo mkdir -p /etc/guacamole/{extensions,lib}
+sudo cp guacamole-1.5.5.war /var/lib/tomcat/webapps/guacamole.war
+sudo ln -s /etc/guacamole /usr/share/tomcat/.guacamole
+echo "GUACAMOLE_HOME=/etc/guacamole" | sudo tee -a /etc/default/tomcat
 
 # === DATABASE AUTH MODULE ===
-echoyellow ">>> Setting up database authentication..."
-mkdir -p /etc/guacamole/{extensions,lib}
-echo "GUACAMOLE_HOME=/etc/guacamole" | tee -a /etc/sysconfig/tomcat
-
-cd /usr/src
-wget https://downloads.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz
+cd /tmp
+wget https://dlcdn.apache.org/guacamole/1.5.5/binary/guacamole-auth-jdbc-1.5.5.tar.gz
 tar -xf guacamole-auth-jdbc-1.5.5.tar.gz
-mv guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/
 
-cat guacamole-auth-jdbc-1.5.5/mysql/schema/*.sql | mariadb -uroot -p"${MYSQL_ROOT_PASS}" guacamoledb
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-8.0.32.tar.gz
+tar -xf mysql-connector-j-8.0.32.tar.gz
+sudo cp mysql-connector-j-8.0.32/mysql-connector-j-8.0.32.jar /etc/guacamole/lib/
+sudo cp guacamole-auth-jdbc-1.5.5/mysql/guacamole-auth-jdbc-mysql-1.5.5.jar /etc/guacamole/extensions/
 
-cd /usr/src
-wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-8.0.33.tar.gz
-tar -xf mysql-connector-j-8.0.33.tar.gz
-mv mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar /etc/guacamole/lib/
+# === SCHEMA CREATION ===
+cd guacamole-auth-jdbc-1.5.5/mysql/schema
+mysql -u guacamole_user -p"${SOLUTIONS_DB_PASS}" guacamole_db < 001-create-schema.sql
+mysql -u guacamole_user -p"${SOLUTIONS_DB_PASS}" guacamole_db < 002-create-admin-user.sql
 
-cat <<EOF > /etc/guacamole/guacamole.properties
+
+# === GUACAMOLE CONFIGURATION ===
+cat <<EOF | sudo tee /etc/guacamole/guacamole.properties
+# Guacamole proxy configuration
+guacd-hostname: localhost
+guacd-port: 4822
+
+# MySQL properties
 mysql-hostname: localhost
-mysql-database: guacamoledb
-mysql-username: guacamole
+mysql-port: 3306
+mysql-database: guacamole_db
+mysql-username: guacamole_user
 mysql-password: ${SOLUTIONS_DB_PASS}
 EOF
 
-systemctl restart tomcat
+sudo systemctl restart tomcat
 
-# === OPTIONAL: NGINX PROXY ===
-echoyellow ">>> Installing and configuring NGINX (optional)..."
-dnf install -y nginx certbot python3-certbot-nginx
-
-cat <<EOF > /etc/nginx/conf.d/guacamole.conf
-server {
-    listen 80;
-    server_name ${SERVER_IP};
-
-    access_log /var/log/nginx/guacamole-access.log;
-    error_log /var/log/nginx/guacamole-error.log;
-
-    location / {
-        proxy_pass http://127.0.0.1:8080/guacamole/;
-        proxy_buffering off;
-        proxy_http_version 1.1;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection \$http_connection;
-        access_log off;
-    }
-}
-EOF
-
-nginx -t && systemctl restart nginx
-
-echogreen ""
-echogreen "Guacamole Server installed successfully!"
-echogreen "--------------------------------------"
-echogreen "Save this information"
-echogreen "Access it via: http://${SERVER_IP}/guacamole"
-echogreen "Root DB Password: ${MYSQL_ROOT_PASS}"
-echogreen "Guacamole DB User: guacamole"
-echogreen "Guacamole DB Password: ${SOLUTIONS_DB_PASS}"
-echogreen ""
-echogreen "--------------------------------------"
-echogreen "More scripts: https://github.com/source-saraiva/easyinstall/"
-echogreen "--------------------------------------"
+# === DISPLAY FINAL URL ===
+SERVER_IP=$(hostname -I | awk '{print $1}')
+echo -e "\e[1;33m>>> Guacamole is available at: http://${SERVER_IP}:8080/guacamole\e[0m"
