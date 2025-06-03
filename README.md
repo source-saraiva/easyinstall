@@ -58,5 +58,13 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 ```bash
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-guacamole.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
 ```
+**Addon - SSL Certificate**
+```bash
+sudo dnf install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d your-domain.com
+sudo nginx -t
+sudo systemctl reload nginx
+echo "0 0,12 * * * root python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
+```
 Credits:
 [r00t](https://idroot.us/install-apache-guacamole-almalinux-9) , [Christian Wells](https://shape.host/resources/how-to-set-up-a-remote-desktop-gateway-with-apache-guacamole-on-almalinux-9)
