@@ -85,9 +85,9 @@ sudo systemctl enable php-fpm
 echoyellow "PHP-FPM pool configuration updated to use nginx user/group."
 
 
-# === DEPENDENCIES ===
+# === TOOLS ===
 echoyellow  "Installing dependecies..."
-sudo dnf install -y dnf-utils wget curl tar unzip nano vim dnf-plugins-core
+sudo dnf install -y dnf-utils wget curl tar unzip nano vim dnf-plugins-core htop
 
 
 # === NGNIX ===
@@ -172,7 +172,12 @@ sudo systemctl enable nginx
 # === FOSSBILLING ===
 sudo mkdir -p /var/www/fossbilling
 cd /tmp
+if [ ! -f "FOSSBilling.zip" ]; then
 sudo curl https://fossbilling.org/downloads/stable -L --output FOSSBilling.zip
+else
+  echogreen "FOSSBilling.zip already exists. Skipping download."
+fi
+
 sudo unzip FOSSBilling.zip -d /var/www/fossbilling
 sudo chown -R nginx:nginx /var/www/fossbilling
 
