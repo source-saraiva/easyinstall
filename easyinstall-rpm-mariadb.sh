@@ -34,10 +34,6 @@ mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "DELETE FROM mysql.user WHERE User='';"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "DROP DATABASE IF EXISTS test;"
 mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
 
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE DATABASE guacamole_db;"
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "CREATE OR REPLACE USER 'guacamole_user'@'localhost' IDENTIFIED BY '${SOLUTIONS_DB_PASS}';"
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "GRANT ALL PRIVILEGES ON guacamole_db.* TO 'guacamole_user'@'localhost';"
-mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
 
 
 # === USEFUL INFORMATION ===
