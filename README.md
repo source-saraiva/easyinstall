@@ -64,6 +64,13 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 ```bash
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-guacamole.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
 ```
+
+### FOSSBilling Server
+**RPM-based systems**
+```bash
+u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-fossbilling.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
+```
+
 **Addon - SSL Certificate**
 ```bash
 sudo dnf install certbot python3-certbot-nginx -y
