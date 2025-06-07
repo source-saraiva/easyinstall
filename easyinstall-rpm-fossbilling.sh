@@ -161,7 +161,7 @@ sudo restorecon -Rv /var/www/html
 sudo setsebool -P httpd_can_network_connect on
 sudo setsebool -P httpd_can_sendmail on
 sudo setsebool -P httpd_can_network_connect_db on
-sudo chcon -R -t httpd_sys_rw_content_t /var/www/fossbilling
+
 
 sudo nginx -t
 sudo systemctl start nginx
@@ -190,6 +190,7 @@ cd /var/www/fossbilling/
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
 
+sudo chcon -R -t httpd_sys_rw_content_t /var/www/fossbilling
 sudo systemctl restart php-fpm
 sudo systemctl restart nginx
 
