@@ -156,12 +156,12 @@ EOF
 
 # SELINUX
 sudo dnf install -y python3-policycoreutils selinux-policy-devel 
-
 sudo semanage fcontext -a -t httpd_sys_content_t '/var/www/html(/.*)?'
 sudo restorecon -Rv /var/www/html
 sudo setsebool -P httpd_can_network_connect on
 sudo setsebool -P httpd_can_sendmail on
 sudo setsebool -P httpd_can_network_connect_db on
+sudo chcon -R -t httpd_sys_rw_content_t /var/www/fossbilling
 
 sudo nginx -t
 sudo systemctl start nginx
@@ -203,12 +203,21 @@ echogreen "Save this information"
 echogreen "FOSSBilling is available at:"
 echogreen "    ngnix  http://${SERVER_IP} or  http://${ACCESS_URL}"
 echogreen "Mysql credentials:"
+echogreen "    u: fossbilling_user p: ${SOLUTIONS_DB_PASS} database: fossbilling_db"
 echogreen "    user: root pass: ${MYSQL_ROOT_PASS}"
 echogreen "To check service status:"
 echogreen "    systemctl status mariadb"
+echogreen "    systemctl status nginx"
 echogreen "To view logs:"
 echogreen "    journalctl -u mariadb"
+echogreen "    journalctl -u nginx"
 echogreen ""
 echogreen "--------------------------------------"
 echogreen "More scripts @ https://github.com/source-saraiva/easyinstall/"
 echogreen "--------------------------------------"
+
+
+# SELINUX view latest denial
+# sudo ausearch -m avc -ts recent
+# sudo journalctl -t setroubleshoot
+
