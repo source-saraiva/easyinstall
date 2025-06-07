@@ -200,7 +200,7 @@ sudo systemctl restart fail2ban
 
 
 
-# === USEFUL INFORMATION ===
+# === DISPLAY INFORMATION ===
 echogreen ""
 echogreen "Guacamole Server installed successfully!"
 echogreen "--------------------------------------"

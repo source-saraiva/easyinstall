@@ -195,7 +195,7 @@ sudo systemctl restart nginx
 
 
 
-# === USEFUL INFORMATION ===
+# === DISPLAY INFORMATION ===
 echogreen ""
 echogreen "FOSSBilling Server installed successfully!"
 echogreen "--------------------------------------"
