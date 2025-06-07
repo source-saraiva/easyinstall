@@ -21,8 +21,12 @@ prompt_nonempty() {
     eval $__resultvar="'$value'"
 }
 
+# === MOTD ===
 echoyellow "=== Easy Install Script (DNS Server Setup with BIND9) ==="
 echoyellow "This script will install and configure a BIND9 DNS server on RPM-based systems."
+echogreen ""
+echogreen ""
+
 
 # Detect local IP and suggested domain
 DEFAULT_IP=$(ip route get 1.1.1.1 | awk '/src/ {print $7; exit}')

@@ -10,7 +10,8 @@ echocyan()   { echo -e "\e[36m$1\e[0m"; }
 # === MOTD ===
 echoyellow "=== Easy Install Script (APACHE GUACAMOLE) ==="
 echoyellow "This script will install and configure an apache guacamole gateway server on RPM-based systems."
-
+echogreen ""
+echogreen ""
 
 # === REPOSITORIES ===
 sudo dnf config-manager --set-enabled crb

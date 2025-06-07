@@ -11,7 +11,8 @@ echocyan()   { echo -e "\e[36m$1\e[0m"; }
 # === MOTD ===
 echoyellow "=== Easy Install Script (DHCP) ==="
 echoyellow "This script will install and configure a DHCP server on RPM-based systems."
-
+echogreen ""
+echogreen ""
 
 
 # Função para validar entrada com valor padrão

@@ -10,7 +10,8 @@ echocyan()   { echo -e "\e[36m$1\e[0m"; }
 # === MOTD ===
 echoyellow "=== Easy Install Script (MARIADB) ==="
 echoyellow "This script will install and configure a mariadb on RPM-based systems."
-
+echogreen ""
+echogreen ""
 
 # === REPOSITORIES ===
 sudo dnf install -y epel-release
@@ -41,7 +42,7 @@ mysql -uroot -p"${MYSQL_ROOT_PASS}" -e "FLUSH PRIVILEGES;"
 
 # === USEFUL INFORMATION ===
 echogreen ""
-echogreen "Guacamole Server installed successfully!"
+echogreen "Mariadb Server installed successfully!"
 echogreen "--------------------------------------"
 echogreen "Save this information"
 echogreen "Mysql credentials:"
