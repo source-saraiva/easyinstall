@@ -53,6 +53,12 @@ u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-dns.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
 ```
 
+### Mariadb Server
+**RPM-based systems**
+```bash
+u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-mariadb.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
+```
+
 ### Guacamole Server
 **RPM-based systems**
 ```bash
