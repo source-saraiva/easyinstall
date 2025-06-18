@@ -34,8 +34,6 @@ ssh root@your.server
 # For RPM
 u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-rpm-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
 
-# For Deb
-u=https://raw.githubusercontent.com/source-saraiva/easyinstall/main/easyinstall-deb-glpi.sh; (curl -ksS "$u" -o ei.sh || wget -q "$u" -O ei.sh) && sudo bash ei.sh
 ```
 ## 📦 Available Roles
 
